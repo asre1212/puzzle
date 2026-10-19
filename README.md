@@ -1,6 +1,6 @@
 # Wordgarden
 
-An offline-ready puzzle PWA: daily five-letter word game, unlimited word practice, Sudoku, and Word Ladder. Includes a generated gameboard home-screen icon.
+An offline-ready puzzle PWA: daily five-letter word game, unlimited word practice, Sudoku, Word Ladder, and Semantic Guessing. Includes a generated gameboard home-screen icon.
 
 ## Play
 
@@ -19,6 +19,7 @@ On iPhone, open in Safari → Share → Add to Home Screen. Wait for **Ready off
 - Accessible color mode with symbols, screen-reader labels, reduced motion.
 - Service-worker offline cache; native sharing or clipboard fallback.
 - Sudoku: generated 9×9 boards with verified unique solutions, two clue levels, pencil notes, undo, hints, conflict highlighting, and automatic saves.
+- Semantic Guessing: 113 secret words, 6,017 accepted words, meaning-based ranks, unlimited guesses, closer-word hints, and saved progress. Rank #1 solves the puzzle. Roughly 1.9 MB of precomputed data is included in the offline pack; no phone-side model download or AI calls.
 - Word Ladder: four-letter transformations, validated moves, common-word generated routes, undo, hints, and automatic saves.
 - Automatic update check on opening, foregrounding, and reconnection. An asset-hash revision ensures each changed release gets a fresh offline cache; failed downloads leave the current worker active.
 - Progress is stored separately from app caches and retained across updates. Backups include all games, unfinished guesses, Sudoku notes, and history. Old Phase 1 backups migrate automatically.
@@ -54,17 +55,21 @@ Do not reorder the v1 answer list: that would change past daily puzzles. Introdu
 
 ## Hugging Face
 
-Not needed for Phase 1: dictionary membership and tile scoring are exact local algorithms. No model downloads or paid API keys are required. Future semantic puzzle modules can use precomputed embeddings or a tested opt-in Transformers.js model; keep scoring independent of language generation.
+Semantic Guessing uses `Xenova/all-MiniLM-L6-v2` (q8 ONNX; Apache 2.0) via Transformers.js 4.3.1 at build time. Mean-pooled normalized 384-dimensional embeddings produce cosine-similarity ranks. At runtime, the app reads bundled ranks entirely locally. This sentence model gives approximate word associations, sometimes surprising; the rank is within the pack, not all English words. Sources and limitations appear in Credits.
+
+To rebuild the pack (only needed when changing semantic content): install Transformers.js 4.3.1 into `/tmp/semantic-build`, download `google-10000-english-no-swears.txt` from the first20hours/google-10000-english repository to `/tmp/semantic-build/vocabulary.txt`, and run `TRANSFORMERS_MODULE=file:///tmp/semantic-build/node_modules/@huggingface/transformers/dist/transformers.node.mjs node scripts/build-semantic.mjs`. Then run `python scripts/rank-semantic.py` (NumPy required), `node scripts/stamp-version.mjs`, and `npm test`. Intermediate embeddings stay in `/tmp/semantic-build`. Keep existing targets/vocabulary available when extending this pack so older backups remain valid.
 
 ## Verification
 
-15 automated checks cover duplicate-letter consumption, 6-attempt outcomes, Eastern midnight/DST, daily schedule stability, streak gaps/losses, backup round trips across all games, old-backup migration, malformed data, unique Sudoku generation across 60 boards, 50 generated ladders, manifest assets, automatic update lifecycle and failed-download safety. Interactive Safari/home-screen/browser visual checks were unavailable in the build environment and remain device checks.
+20 automated checks cover duplicate-letter consumption, 6-attempt outcomes, Eastern midnight/DST, daily schedule stability, streak gaps/losses, backup round trips across all games, old-backup migration, malformed data, unique Sudoku generation across 60 boards, 50 generated ladders, manifest assets, automatic update lifecycle and failed-download safety. Semantic checks cover complete rank permutations, exact wins, related-word ordering, guess rejection, draft/history restoration, and older-backup migration. Interactive Safari/home-screen/browser visual checks were unavailable in the build environment and remain device checks.
 
 ## Sources
 
 - Dictionary: https://github.com/dwyl/english-words (Unlicense, retained in dist/credits.html).
 - Offline design: https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Offline_and_background_operation
-- Optional later AI: https://huggingface.co/docs/transformers.js/en/index
+- Semantic embeddings: https://huggingface.co/Xenova/all-MiniLM-L6-v2
+- Vocabulary: https://github.com/first20hours/google-10000-english
+- Build-time AI: https://huggingface.co/docs/transformers.js/en/index
 
 ## Transfer to another phone
 

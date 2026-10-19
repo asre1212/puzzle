@@ -22,4 +22,4 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
 For more information, please refer to &lt;https://unlicense.org/&gt;
-</pre></main></html>
+</pre><h2>Semantic Guessing</h2><p>Similarity ranks generated with <a href="https://huggingface.co/Xenova/all-MiniLM-L6-v2">Xenova/all-MiniLM-L6-v2</a>, the quantized ONNX conversion of <a href="https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2">sentence-transformers/all-MiniLM-L6-v2</a> (Apache 2.0), using <a href="https://huggingface.co/docs/transformers.js">Transformers.js</a>. Mean-pooled, normalized embeddings are compared with cosine similarity. Ranks are relative to this bundled vocabulary, not all English words.</p><p>Guess vocabulary: first 6,000 alphabetic entries from <a href="https://github.com/first20hours/google-10000-english">first20hours/google-10000-english</a> (no-swears list), derived from Peter Norvig’s word frequency compilation, plus independently selected secret words. The pack can include names, abbreviations, and inflections. No model runs on your phone and no guesses are uploaded.</p></main></html>
