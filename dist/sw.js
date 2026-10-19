@@ -1,5 +1,5 @@
 // Bump this version for every release. Never delete progress storage here.
-const CACHE='wordgarden-shell-ee83d414d926', BASE=new URL('./',self.location.href), ASSETS=['./','./index.html','./app.js','./core.js','./words.js','./puzzles.js','./puzzle-ui.js','./ladder-words.js','./style.css','./manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png','./credits.html'];
+const CACHE='wordgarden-shell-94c962fe4170', BASE=new URL('./',self.location.href), ASSETS=['./','./index.html','./app.js','./core.js','./words.js','./puzzles.js','./puzzle-ui.js','./ladder-words.js','./style.css','./manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png','./credits.html'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS.map(p=>new Request(new URL(p,BASE).href,{cache:'reload'})))).then(()=>self.skipWaiting())));
 self.addEventListener('message',event=>{if(event.data?.type==='ACTIVATE_UPDATE')event.waitUntil(self.skipWaiting());});
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('wordgarden-shell-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
