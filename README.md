@@ -4,7 +4,9 @@ An offline-ready puzzle PWA: daily five-letter word game, unlimited word practic
 
 ## Play
 
-Live app: https://wordgarden-daily.savorymug256.chatgpt.site
+GitHub app: https://asre1212.github.io/puzzle/
+
+Alternate hosted copy: https://wordgarden-daily.savorymug256.chatgpt.site
 
 On iPhone, open in Safari → Share → Add to Home Screen. Wait for **Ready offline** before disconnecting. The first visit requires a connection. Private Sites hosting may require owner sign-in for online access.
 
@@ -29,7 +31,11 @@ No dependencies or build step. Serve `dist/` with an HTTP server for development
 
 ## GitHub Pages
 
-All deployable files are in `dist/`. The included Pages workflow stamps the release, tests, enables Pages when permissions allow, and uploads that folder. If initial Pages enablement is refused, select **Settings → Pages → Source: GitHub Actions**, then rerun **Deploy puzzle app**. The default live deployment above is separate; changes on GitHub do not automatically update the Sites copy.
+Pages is configured to **Deploy from a branch → main → / (root)**. The root `index.html` opens `dist/`; `.nojekyll` ensures static assets are published. The installable PWA starts at `/puzzle/dist/` and works offline once cached.
+
+GitHub publishes new pushes through its built-in Pages workflow. `Check puzzle app` validates the code and committed offline cache revision. Before committing app changes, run `node scripts/stamp-version.mjs` and `npm test` so opening an installed app detects the new release.
+
+The alternate Sites deployment is separate. Progress belongs to each origin: use Settings → Export backup / Restore backup to transfer progress from the alternate copy to GitHub.
 
 ## Architecture
 
