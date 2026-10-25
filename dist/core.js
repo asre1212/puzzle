@@ -9,7 +9,16 @@ export function score(guess, answer) {
 export function dayKey(date=new Date()) { return new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(date); }
 export function dayNumber(key) { return Math.floor(Date.parse(key+'T12:00:00Z')/86400000); }
 export function dailyAnswer(key,answers) { return answers[((dayNumber(key)-20744)%answers.length+answers.length)%answers.length]; }
-export function outcome(game) { return game.guesses.includes(game.answer)?'won':game.guesses.length===6?'lost':'playing'; }
+export function outcome(game) { return game.revealed?'revealed':game.guesses.includes(game.answer)?'won':game.guesses.length===6?'lost':'playing'; }
+export function wordHint(game) {
+ if(outcome(game)!=='playing')return null;
+ const known=new Set(game.hintPositions||[]);
+ game.guesses.forEach(w=>score(w,game.answer).forEach((mark,i)=>{if(mark==='correct')known.add(i);}));
+ const index=[0,1,2,3,4].find(i=>!known.has(i));
+ if(index===undefined)return null;
+ game.hintPositions=[...(game.hintPositions||[]),index];
+ return {index,letter:game.answer[index]};
+}
 export function statistics(games,today) {
  const completed=Object.values(games).filter(g=>outcome(g)!=='playing'), wins=completed.filter(g=>outcome(g)==='won'), dist=Array(6).fill(0);
  wins.forEach(g=>dist[g.guesses.length-1]++);
@@ -22,7 +31,7 @@ export function statistics(games,today) {
 export function newState() { return {version:1,daily:{},practice:[],settings:{contrast:false,motion:false},activePractice:null,extras:emptyExtras()}; }
 export function validateState(s,answers,allowed) {
  if(!s || s.version!==1 || !s.daily || Array.isArray(s.daily) || typeof s.daily!=='object' || !Array.isArray(s.practice) || Object.keys(s.daily).length>20000 || s.practice.length>10000 || !s.settings) throw Error('This is not a valid Wordgarden backup.');
- const valid=(g,mode)=>g && g.mode===mode && typeof g.id==='string' && g.id.length<100 && /^\d{4}-\d{2}-\d{2}$/.test(g.date) && Number.isFinite(dayNumber(g.date)) && answers.includes(g.answer) && Array.isArray(g.guesses) && g.guesses.length<=6 && (g.draft===undefined||typeof g.draft==='string'&&/^[a-z]{0,5}$/.test(g.draft)) && g.guesses.every(w=>typeof w==='string' && /^[a-z]{5}$/.test(w) && allowed.has(w)) && (g.guesses.indexOf(g.answer)<0 || g.guesses.indexOf(g.answer)===g.guesses.length-1);
+ const valid=(g,mode)=>g && g.mode===mode && typeof g.id==='string' && g.id.length<100 && /^\d{4}-\d{2}-\d{2}$/.test(g.date) && Number.isFinite(dayNumber(g.date)) && answers.includes(g.answer) && (g.revealed===undefined||typeof g.revealed==='boolean') && (g.hintPositions===undefined||Array.isArray(g.hintPositions)&&g.hintPositions.length<=5&&new Set(g.hintPositions).size===g.hintPositions.length&&g.hintPositions.every(i=>Number.isInteger(i)&&i>=0&&i<5)) && Array.isArray(g.guesses) && g.guesses.length<=6 && (g.draft===undefined||typeof g.draft==='string'&&/^[a-z]{0,5}$/.test(g.draft)) && g.guesses.every(w=>typeof w==='string' && /^[a-z]{5}$/.test(w) && allowed.has(w)) && (!g.revealed||!g.guesses.includes(g.answer)) && (g.guesses.indexOf(g.answer)<0 || g.guesses.indexOf(g.answer)===g.guesses.length-1);
  for(const [date,g] of Object.entries(s.daily)) if(date!==g.date||g.id!==date||!valid(g,'daily')||g.answer!==dailyAnswer(date,answers))throw Error('Invalid daily game in backup.');
  if(s.practice.some(g=>!valid(g,'practice')) || new Set(s.practice.map(g=>g.id)).size!==s.practice.length)throw Error('Invalid practice game in backup.');
  if(s.activePractice!==null && !s.practice.some(g=>g.id===s.activePractice))throw Error('Invalid active game in backup.');

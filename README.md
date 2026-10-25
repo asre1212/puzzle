@@ -15,6 +15,7 @@ On iPhone, open in Safari → Share → Add to Home Screen. Wait for **Ready off
 - Daily puzzles change at midnight America/New_York, including daylight saving time.
 - Unlimited practice avoids today's answer and the last 20 practice words when possible.
 - Daily results, current/best streak, guess distribution, and separate practice totals.
+- Separate Hint and Show answer controls in every puzzle. Letter hints do not consume guesses; Sudoku hints fill a cell; ladder hints suggest a next step; semantic hints suggest a closer word. Full reveals require confirmation, persist across reload/backup, and do not count as wins.
 - Local browser storage; JSON export/restore; explicit confirmation before replacement/reset.
 - Accessible color mode with symbols, screen-reader labels, reduced motion.
 - Service-worker offline cache; native sharing or clipboard fallback.
@@ -61,7 +62,7 @@ To rebuild the pack (only needed when changing semantic content): install Transf
 
 ## Verification
 
-20 automated checks cover duplicate-letter consumption, 6-attempt outcomes, Eastern midnight/DST, daily schedule stability, streak gaps/losses, backup round trips across all games, old-backup migration, malformed data, unique Sudoku generation across 60 boards, 50 generated ladders, manifest assets, automatic update lifecycle and failed-download safety. Semantic checks cover complete rank permutations, exact wins, related-word ordering, guess rejection, draft/history restoration, and older-backup migration. Interactive Safari/home-screen/browser visual checks were unavailable in the build environment and remain device checks.
+24 automated checks cover duplicate-letter consumption, 6-attempt outcomes, Eastern midnight/DST, daily schedule stability, streak gaps/losses, backup round trips across all games, old-backup migration, malformed data, unique Sudoku generation across 60 boards, 50 generated ladders, manifest assets, automatic update lifecycle and failed-download safety. Assistance checks cover letter clues, reveal statistics, all-game backup preservation, and invalid assistance metadata. Semantic checks cover complete rank permutations, exact wins, related-word ordering, guess rejection, draft/history restoration, and older-backup migration. Interactive Safari/home-screen/browser visual checks were unavailable in the build environment and remain device checks.
 
 ## Sources
 
