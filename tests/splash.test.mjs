@@ -8,20 +8,23 @@ test('All holiday windows activate on their first day and revert after their las
  ['02-07','02-15','02-06','02-16','valentine','generic'],
  ['06-27','07-07','06-26','07-08','july4','summer'],
  ['10-18','11-01','10-17','11-02','halloween','generic'],
+ ['11-05','11-10','11-04','11-11','birthday','generic'],
  ['12-10','12-26','12-09','12-27','christmas','newyear']]){
   assert.notEqual(on('2026-'+before),id);assert.equal(on('2026-'+start),id);assert.equal(on('2026-'+end),id);assert.equal(on('2026-'+after),next);
  }
  assert.equal(on('2026-12-27'),'newyear');assert.equal(on('2027-01-03'),'newyear');assert.equal(on('2027-01-04'),'generic');
 });
 test('Seasonal windows and annual repetition respect holiday priority and Eastern midnight',()=>{
- for(const year of [2026,2027,2028,2030])for(const [md,id] of [['02-28','generic'],['03-01','spring'],['05-31','spring'],['06-01','summer'],['07-04','july4'],['08-31','summer'],['09-01','generic'],['10-25','halloween']])assert.equal(on(year+'-'+md),id);
+ for(const year of [2026,2027,2028,2030])for(const [md,id] of [['02-28','generic'],['03-01','spring'],['05-31','spring'],['06-01','summer'],['07-04','july4'],['08-31','summer'],['09-01','generic'],['10-25','halloween'],['11-05','birthday'],['11-10','birthday'],['11-11','generic']])assert.equal(on(year+'-'+md),id);
  assert.equal(on('2028-02-29'),'generic');
  assert.equal(themeForDate(new Date('2026-10-18T03:59:59Z')),'generic');assert.equal(themeForDate(new Date('2026-10-18T04:00:00Z')),'halloween');
  assert.equal(themeForDate(new Date('2027-01-04T04:59:59Z')),'newyear');assert.equal(themeForDate(new Date('2027-01-04T05:00:00Z')),'generic');
+ assert.equal(themeForDate(new Date('2026-11-05T04:59:59Z')),'generic');assert.equal(themeForDate(new Date('2026-11-05T05:00:00Z')),'birthday');
+ assert.equal(themeForDate(new Date('2026-11-11T04:59:59Z')),'birthday');assert.equal(themeForDate(new Date('2026-11-11T05:00:00Z')),'generic');
  assert.equal(themeForDate(new Date('invalid')),'generic');
 });
-test('Eight distinct artwork designs contain nine clipped jigsaw pieces with unique IDs',()=>{
- assert.equal(Object.keys(themes).length,8);const arts=Object.keys(themes).map(id=>puzzleArtwork(id));assert.equal(new Set(arts).size,8);
+test('Nine distinct artwork designs contain nine clipped jigsaw pieces with unique IDs',()=>{
+ assert.equal(Object.keys(themes).length,9);const arts=Object.keys(themes).map(id=>puzzleArtwork(id));assert.equal(new Set(arts).size,9);
  for(const svg of arts){assert.equal((svg.match(/class="jigsaw-piece"/g)||[]).length,9);assert.equal((svg.match(/<clipPath/g)||[]).length,9);assert.equal(new Set([...svg.matchAll(/id="([^"]+)"/g)].map(m=>m[1])).size,9);assert.ok(!/https?:\/\//.test(svg.replace('http://www.w3.org/2000/svg','')));}
 });
 function fixture({motion=false,blockedStorage=false}={}){

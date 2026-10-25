@@ -3,7 +3,7 @@ import {semanticUI} from './semantic-ui.js';
 import {wordHint,score,dayKey,dailyAnswer,outcome,statistics,newState,validateState} from './core.js';
 import {puzzleUI} from './puzzle-ui.js';
 import {answers,words} from './words.js';
-const APP_VERSION='1.4.0';
+const APP_VERSION='1.4.1';
 const allowed=new Set([...words,...answers]), KEY='wordgarden-v1', $=s=>document.querySelector(s), main=$('#main');
 let state=newState(), view='today', draft='', today=dayKey(), toastTimer, offlineReady=false, storageOK=true, recoveryRaw=null;
 try {const raw=localStorage.getItem(KEY);if(raw)state=validateState(JSON.parse(raw),answers,allowed);}catch(e){storageOK=false;try{recoveryRaw=localStorage.getItem(KEY);}catch{}setTimeout(()=>toast('Saved data could not be loaded. Export it in Settings before resetting.'),400);}

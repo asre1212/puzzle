@@ -22,7 +22,7 @@ On iPhone, open in Safari → Share → Add to Home Screen. Wait for **Ready off
 - Sudoku: generated 9×9 boards with verified unique solutions, two clue levels, pencil notes, undo, hints, conflict highlighting, and automatic saves.
 - Semantic Guessing: 113 secret words, 6,017 accepted words, meaning-based ranks, unlimited guesses, closer-word hints, and saved progress. Rank #1 solves the puzzle. Roughly 1.9 MB of precomputed data is included in the offline pack; no phone-side model download or AI calls.
 - Word Ladder: four-letter transformations, validated moves, common-word generated routes, undo, hints, and automatic saves.
-- Three-second animated jigsaw splash: generic plus Halloween, Christmas, New Year, spring, summer, July 4th, and Valentine’s Day. The in-app opening screen switches annually in Eastern time, works offline, can be skipped immediately, and respects both app/device reduced-motion settings. Settings includes previews and the full calendar. It does not change the iOS system launch image.
+- Three-second animated jigsaw splash: generic plus Halloween, Christmas, New Year, spring, summer, July 4th, Valentine’s Day, and a November 5–10 birthday design. The in-app opening screen switches annually in Eastern time, works offline, can be skipped immediately, and respects both app/device reduced-motion settings. Settings includes previews and the full calendar. It does not change the iOS system launch image.
 - Automatic update check on opening, foregrounding, and reconnection. An asset-hash revision ensures each changed release gets a fresh offline cache; failed downloads leave the current worker active.
 - Progress is stored separately from app caches and retained across updates. Backups include all games, unfinished guesses, Sudoku notes, and history. Old Phase 1 backups migrate automatically.
 - Best-effort persistent-storage request; this cannot prevent manual data clearing.
@@ -64,6 +64,7 @@ Do not reorder the v1 answer list: that would change past daily puzzles. Introdu
 | Summer | June 1–August 31 |
 | July 4th | June 27–July 7 (overrides summer) |
 | Halloween | October 18–November 1 |
+| Birthday | November 5–10 |
 | Christmas | December 10–26 |
 | New Year | December 27–January 3 |
 | Generic | All other dates |
