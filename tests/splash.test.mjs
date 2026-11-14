@@ -36,12 +36,12 @@ function fixture({motion=false,blockedStorage=false}={}){
  const controller=createSplashController({doc,win,now:()=>clock,later:(fn,ms)=>{timers.set(++id,{fn,due:clock+ms});return id;},cancel:n=>timers.delete(n)});
  return {controller,seen,doc,normalDialog,session,timers,get focused(){return focused;},advance(ms){clock+=ms;for(const [id,t] of [...timers])if(t.due<=clock){timers.delete(id);t.fn();}},visibility(hidden){doc.hidden=hidden;listeners.get('visibilitychange')();},setDate(date){clock=Date.parse(date);}};
 }
-test('Every theme closes at exactly 3000ms, including reduced motion and blocked storage',()=>{
- assert.equal(SPLASH_DURATION,3000);
+test('Every theme closes at exactly 2000ms, including reduced motion and blocked storage',()=>{
+ assert.equal(SPLASH_DURATION,2000);
  for(const opts of [{},{motion:true},{blockedStorage:true}])for(const id of Object.keys(themes)){
   const f=fixture(opts);assert.equal(f.controller.show(id,true),true);const d=f.seen.at(-1);
   assert.equal(d.dataset.theme,id);if(opts.motion)assert.ok(d.className.includes('splash-static'));
-  f.advance(2999);assert.equal(d.open,true);f.advance(1);assert.equal(d.open,false);assert.equal(d.isConnected,false);assert.equal(f.timers.size,0);assert.ok(f.focused);
+  f.advance(1999);assert.equal(d.open,true);f.advance(1);assert.equal(d.open,false);assert.equal(d.isConnected,false);assert.equal(f.timers.size,0);assert.ok(f.focused);
  }
 });
 test('Skipping, quick update reloads and brief app switches do not replay or block gameplay',()=>{
@@ -52,7 +52,7 @@ test('Skipping, quick update reloads and brief app switches do not replay or blo
  f.normalDialog.open=true;assert.equal(f.controller.show(),false);assert.equal(f.seen.length,2);
 });
 test('Returning after a theme window switches back to generic, and preview never pins a theme',()=>{
- const f=fixture();f.controller.launch();f.advance(3000);f.controller.show('christmas',true);f.advance(3000);
+ const f=fixture();f.controller.launch();f.advance(2000);f.controller.show('christmas',true);f.advance(2000);
  f.visibility(true);f.advance(1000);f.visibility(false);assert.equal(f.seen.length,2);
  f.visibility(true);f.setDate('2026-11-02T05:00:00Z');f.visibility(false);assert.equal(f.seen.at(-1).dataset.theme,'generic');
  f.controller.destroy();assert.equal(f.seen.at(-1).open,false);assert.equal(f.timers.size,0);

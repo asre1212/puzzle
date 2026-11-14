@@ -1,6 +1,6 @@
 import {themes,themeForDate,puzzleArtwork,themeSchedule} from './splash-themes.js';
 export {themes,themeForDate,themeSchedule};
-export const SPLASH_DURATION=3000;
+export const SPLASH_DURATION=2000;
 const REOPEN_AFTER=30*60*1000,RELOAD_GRACE=12000;
 // Only presentation timestamps use session storage; game progress is never changed here.
 export function createSplashController({doc=document,win=window,now=()=>Date.now(),later=setTimeout,cancel=clearTimeout}={}){
@@ -28,7 +28,7 @@ export function createSplashController({doc=document,win=window,now=()=>Date.now
   active={dialog,previous,timer:null};dialog.querySelector('button').onclick=dismiss;
   dialog.addEventListener('cancel',e=>{e.preventDefault();dismiss();});
   try{dialog.showModal();}catch{dismiss();return false;}
-  // One timer closes every design after three seconds, even with motion disabled.
+  // One timer closes every design after two seconds, even with motion disabled.
   active.timer=later(dismiss,SPLASH_DURATION);
   if(!preview){lastTheme=id;try{win.sessionStorage.setItem('wordgarden-splash-last',String(now()));}catch{}}
   return true;
